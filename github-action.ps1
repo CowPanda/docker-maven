@@ -1,10 +1,14 @@
+Set-PSDebug -Trace 1
 $event_name = %1
 $username = %2
 $password = %3
 $tags = @('3.6.3', '3.6', '3')
+Write-Host "Starting"
 Get-ChildItem -Path windows\* -File -Include "Dockerfile.windows-*" | ForEach-Object {
     Push-Location
     $dockerfile = $_
+
+    Write-Host "Dockerfile: $dockerfile"
 
     $windowsType = '-windowsservercore'
     $windowsDockerTag = 'ltsc2019'
@@ -20,6 +24,7 @@ Get-ChildItem -Path windows\* -File -Include "Dockerfile.windows-*" | ForEach-Ob
     }
 
     # run tests
+    Write-Host "Running tests: $dockerfile"
     Push-Location
     $env:TAG=$dockerfile.Name.Replace('Dockerfile.windows-', '')
     $env:WINDOWS_DOCKER_TAG=$windowsDockerTag
@@ -31,6 +36,7 @@ Get-ChildItem -Path windows\* -File -Include "Dockerfile.windows-*" | ForEach-Ob
     $tags | ForEach-Object {
     Push-Location windows
     $tag = ('csanchez/maven:{0}-{1}{2}-{3}' -f $_,$dockerfile.Name.Replace('Dockerfile.windows-', ''),$windowsType,$windowsDockerTag)
+    Write-Host "Building: $tag"
     docker build -f $dockerfile --tag $tag --build-arg WINDOWS_DOCKER_TAG=${windowsDockerTag} .
 
     if($event_name -eq 'push') {
