@@ -19,5 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build Images
-      run: .\github-action.ps1 ${{ github.event_name }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        Install-Module -Name Pester -Force -RequiredVersion 4.9.0
+        github-action.ps1 ${{ github.event_name }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
       shell: pwsh

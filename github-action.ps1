@@ -1,4 +1,3 @@
-Install-Module -Name Pester -Force -RequiredVersion 4.9.0
 $event_name = %1
 $username = %2
 $password = %3
