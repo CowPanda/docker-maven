@@ -21,12 +21,14 @@ build-version() {
 	local version=$1
 	local versionAliases=("${@:2}")
     pushd "$version"
+    echo "Building $DOCKER_REPOSITORY:$version"
     docker build -t "$DOCKER_REPOSITORY:$version" .
     if [ -n "$DOCKER_PUSH" ]; then
         echo "Pushing $version"
         docker push "$version"
     fi
     for versionAlias in "${versionAliases[@]}"; do
+        echo "Tagging $DOCKER_REPOSITORY:$versionAlias"
         docker tag "$DOCKER_REPOSITORY:$version" "$DOCKER_REPOSITORY:$versionAlias"
         if [ -n "$DOCKER_PUSH" ]; then
             docker push "$DOCKER_REPOSITORY:$versionAlias"
