@@ -19,5 +19,5 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build Images
-      run: github-action.bat ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+      run: github-action.bat ${{ github.event_name }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
       shell: pwsh
